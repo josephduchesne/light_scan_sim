@@ -9,6 +9,14 @@ Here's a basic rundown:
 - Input: An OccupancyGrid (you can publish this using a [map_server](http://wiki.ros.org/map_server) node)
 - Output: A [LaserScan](http://docs.ros.org/api/sensor_msgs/html/msg/LaserScan.html) against the OccupancyGrid
 
+Features:
+- Gaussian noise (optional, disable by setting laser/noise to 0)
+- Todo: Unit tests
+- Todo: RosParam configuration
+- Todo: Vector obstacles
+- Todo: Glass
+- Todo: Reflectivity
+
 ## License
 
 MIT License
