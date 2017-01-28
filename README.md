@@ -24,7 +24,6 @@ Features:
 - ~~Reflectivity~~
 
 Configurable Parameters:
-- hz: laser scan frequency (double, default: 40.0)
 - range/min: Min laser range (double, default: 1.0). Values closer will be set to range/min value.
 - range/max: Max laser range (double, default: 1.0). Values farther will be set to range/max + 1.0 (no return)
 - range/noise: Gaussian noise standard deviation (double, default: 0.01). Set to 0 to disable noise.
@@ -32,8 +31,9 @@ Configurable Parameters:
 - angle/min: Scan end angle (double, default π/2, inclusive)
 - angle/increment: Angular step size (double, default 0.01)
 - **map/topic**: The OccupancyGrid topic to listen to (string, default "/map")
-- **laser/topic**: The LaserScan topic to publish to (string, default "/scan")
 - map/image_frame: An intermediate TF frame published internally (string, default "/map_image")
+- laser/hz: laser scan frequency (double, default: 40.0)
+- **laser/topic**: The LaserScan topic to publish to (string, default "/scan")
 - **laser/frame**: The tf frame that the LaserScan is attached to  (string, default "/initialpose")
 
 ## License
