@@ -19,7 +19,13 @@ LightScanSim::LightScanSim(ros::NodeHandle node) {
 
   // Todo: Load settings
 
-  ray_cast_ = std::make_shared<RayCast>();
+  ray_cast_ = std::make_shared<RayCast>(node.param<double>("range/min", 1.0),
+                                        node.param<double>("range/max", 20.0),
+                                        node.param<double>("angle/min", -M_PI_2),
+                                        node.param<double>("angle/max", M_PI_2),
+                                        node.param<double>("angle/increment", 0.01),
+                                        node.param<double>("range/noise", 0.01));
+
 
   // Subscribe / Publish
   map_sub_ = node.subscribe(map_topic_, 1, &LightScanSim::MapCallback, this);

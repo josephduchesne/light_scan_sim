@@ -7,6 +7,7 @@
  */
 
 #include "light_scan_sim/ray_cast.h"
+#include <algorithm>
 
 /**
  * @brief Return the first collision point (hit) and true, or false if no collision
@@ -66,7 +67,8 @@ sensor_msgs::LaserScan RayCast::Scan(cv::Point start, double yaw) {
       // Add gaussian noise
       range += gaussian_dist(random_generator_);
 
-      // todo: Apply min
+      range = std::max(ray_min_, range);  // Apply min
+
       scan.ranges.push_back(range);
     } else {
       scan.ranges.push_back(ray_max_+1.0);  // Out of range, represented by value>max

@@ -35,12 +35,13 @@ class RayCast {
   public:
     RayCast() {}
     RayCast(double ray_min, double ray_max,
-            double angle_min, double angle_max, double angle_inc) {
+            double angle_min, double angle_max, double angle_inc, double noise) {
       ray_min_ = ray_min;
       ray_max_ = ray_max;
       angle_min_ = angle_min;
       angle_max_ = angle_max;
       angle_inc_ = angle_inc;
+      noise_std_dev_ = noise;
     };
 
     void SetMap(cv::Mat& map, double m_per_px) {
