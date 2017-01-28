@@ -15,11 +15,11 @@
 int main(int argc, char** argv){
   ros::init(argc, argv, "light_scan_sim");
 
-  ros::NodeHandle node;
+  ros::NodeHandle node("~");
 
   LightScanSim sim(node); 
 
-  ros::Rate rate(node.param<double>("hz", 40.0));
+  ros::Rate rate(node.param<double>("laser/hz", 40.0));
 
   while (node.ok()){
     ros::spinOnce();  // Read any waiting messages
