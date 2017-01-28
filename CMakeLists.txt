@@ -124,6 +124,7 @@ catkin_package(
 include_directories(
   ${catkin_INCLUDE_DIRS}
   ${OpenCV_INCLUDE_DIRS}
+  include
 )
 
 ## Declare a C++ library
@@ -137,7 +138,10 @@ include_directories(
 # add_dependencies(light_scan_sim ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-add_executable(light_scan_sim_node src/light_scan_sim_node.cpp)
+add_executable(light_scan_sim_node 
+  src/light_scan_sim_node.cpp
+  src/light_scan_sim.cpp
+  src/ray_cast.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
