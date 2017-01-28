@@ -11,11 +11,11 @@ Here's a basic rundown:
 
 Features:
 - Gaussian noise (optional, disable by setting laser/noise to 0)
-- Todo: Unit tests
-- Todo: RosParam configuration
-- Todo: Vector obstacles
-- Todo: Glass
-- Todo: Reflectivity
+- ~~Unit tests~~
+- ~~Full RosParam Configuration~~
+- ~~Vector obstacles~~
+- ~~Glass~~
+- ~~Reflectivity~~
 
 ## License
 
