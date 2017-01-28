@@ -19,7 +19,7 @@ int main(int argc, char** argv){
 
   LightScanSim sim(node); 
 
-  ros::Rate rate(node.param<double>("laser/hz", 40.0));
+  ros::Rate rate(node.param<double>("hz", 40.0));
 
   while (node.ok()){
     ros::spinOnce();  // Read any waiting messages
