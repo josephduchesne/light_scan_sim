@@ -1,3 +1,6 @@
+# Vim tmp files
+*.sw*
+
 # Compiled Object files
 *.slo
 *.lo
