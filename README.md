@@ -23,7 +23,7 @@ Features:
 - ~~Glass~~
 - ~~Reflectivity~~
 
-Parameters:
+Configurable Parameters:
 - hz: laser scan frequency (double, default: 40.0)
 - range/min: Min laser range (double, default: 1.0). Values closer will be set to range/min value.
 - range/max: Max laser range (double, default: 1.0). Values farther will be set to range/max + 1.0 (no return)
