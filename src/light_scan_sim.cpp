@@ -27,7 +27,6 @@ LightScanSim::LightScanSim(ros::NodeHandle node) {
 
   node.getParam("map/topic", map_topic_);
   node.getParam("laser/topic", laser_topic_);
-  node.getParam("map/frame", map_frame_);
   node.getParam("map/image_frame", image_frame_);
   node.getParam("laser/frame", laser_frame_);
 
@@ -79,7 +78,7 @@ void LightScanSim::Update() {
   // Broadcast the tf representing the map image
   tf_broadcaster_.sendTransform(
     tf::StampedTransform(map_to_image_, ros::Time::now(),
-                         map_frame_, image_frame_));
+                         map_.header.frame_id, image_frame_));
 
   // Use that transform to generate a point in image space
   tf::StampedTransform image_to_laser;

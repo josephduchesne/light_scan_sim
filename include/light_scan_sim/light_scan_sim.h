@@ -42,7 +42,6 @@ class LightScanSim {
   std::string map_topic_ = "/map";
   std::string laser_topic_ = "/scan";
 
-  std::string map_frame_ = "/map";
   std::string image_frame_ = "/map_image";
   std::string laser_frame_ = "/initialpose";
 
