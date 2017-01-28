@@ -7,11 +7,12 @@ import tf
 
 pose = Pose()
 
+# Update the global pose
 def callback_pose(data):
     global pose
-    print data
     pose = data.pose.pose;
 
+# Publish rviz /initialpose as a tf
 if __name__ == '__main__':
     rospy.init_node('pose_estimate_tf_pub')
     rospy.Subscriber("/initialpose", PoseWithCovarianceStamped, callback_pose)

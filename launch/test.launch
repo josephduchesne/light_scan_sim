@@ -5,4 +5,13 @@
   <!-- Run the map server -->
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
+  <!-- pose estimate publisher -->
+  <node name="pose_estimate_publisher" pkg="light_scan_sim" type="pose_estimate_tf_publisher.py" output="screen" /> 
+
+  <!-- The scan simulator -->
+  <node name="light_scan_sim" pkg="light_scan_sim" type="light_scan_sim_node" output="screen" />
+
+  <!-- RViz -->
+  <node name="visualisation" pkg="rviz" type="rviz" args="-d $(find light_scan_sim)/test/test.rviz" />
+
 </launch>
