@@ -9,13 +9,13 @@ Here's a basic rundown:
 - Input: An OccupancyGrid (you can publish this using a [map_server](http://wiki.ros.org/map_server) node)
 - Output: A [LaserScan](http://docs.ros.org/api/sensor_msgs/html/msg/LaserScan.html) against the OccupancyGrid
 
-Quickstart:
+## Quickstart:
 - git clone this into your catkin workspace
 - catkin_make
 - roslaunch light_scan_sim test.launch
 - use the 2D Pose Estimate tool in RViz to set the simulated laser position
 
-Features:
+## Features:
 - Gaussian noise (optional, disable by setting laser/noise to 0)
 - Full RosParam Configuration
 - ~~Unit tests~~
@@ -23,7 +23,7 @@ Features:
 - ~~Glass~~
 - ~~Reflectivity~~
 
-Configurable Parameters:
+## Configurable Parameters:
 - range/min: Min laser range (double, default: 1.0). Values closer will be set to range/min value.
 - range/max: Max laser range (double, default: 1.0). Values farther will be set to range/max + 1.0 (no return)
 - range/noise: Gaussian noise standard deviation (double, default: 0.01). Set to 0 to disable noise.
