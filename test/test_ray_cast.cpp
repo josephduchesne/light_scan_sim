@@ -10,12 +10,12 @@
 #include <gtest/gtest.h>
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/highgui/highgui.hpp>
+#include <sensor_msgs/LaserScan.h>
 
 // The fixture for testing class RayCast
 class RayCastTest : public ::testing::Test {};
 
-TEST_F(RayCastTest, TestTest) {
+TEST_F(RayCastTest, TraceTest) {
   RayCast rc;
   cv::Point start, end, hit;
 
@@ -35,6 +35,30 @@ TEST_F(RayCastTest, TestTest) {
   start = cv::Point(5,5);
   end = cv::Point(-5,5);
   EXPECT_FALSE(rc.Trace(start, end, hit));
+}
+
+
+TEST_F(RayCastTest, ScanTest) {
+  RayCast rc(0, 50, -M_PI_2, M_PI_2, M_PI_2, 0);
+  cv::Point start(5,5);
+
+  // Set up the raycast with a very simple map
+  cv::Mat mat = cv::Mat::zeros(20, 20, CV_8UC1); 
+  cv::rectangle( mat, cv::Point( 15, 0 ), cv::Point( 20, 20), 255, CV_FILLED);
+  cv::rectangle( mat, cv::Point( 0, 17 ), cv::Point( 20, 20), 255, CV_FILLED);
+  rc.SetMap(mat, 2.0);  // 2.0m per pixel
+
+  // Test tracing from empty space into wall
+  sensor_msgs::LaserScan s = rc.Scan(start, M_PI_2);  // Scan angled up
+
+  // General properties
+  EXPECT_NEAR(s.angle_min, -M_PI_2, 1e-5);
+  EXPECT_EQ(3, s.ranges.size());
+
+  // Right wall
+  EXPECT_NEAR(s.ranges[0], 20.0, 1e-5);  // 20m to right wall
+  EXPECT_NEAR(s.ranges[1], 24.0, 1e-5);  // 24m to top wall
+  EXPECT_NEAR(s.ranges[2], 51.0, 1e-5);  // max range + 1m for no return
 }
 
 int main(int argc, char **argv) {
