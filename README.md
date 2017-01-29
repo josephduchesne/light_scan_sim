@@ -18,7 +18,7 @@ Here's a basic rundown:
 ## Features:
 - Gaussian noise (optional, disable by setting laser/noise to 0)
 - Full RosParam Configuration
-- ~~Unit tests~~
+- Unit tests
 - ~~Vector obstacles~~
 - ~~Glass~~
 - ~~Reflectivity~~
