@@ -10,7 +10,6 @@ Panels:
         - /TF1
         - /TF1/Frames1
         - /LaserScan1
-        - /LaserScan1/Status1
       Splitter Ratio: 0.5
     Tree Height: 565
   - Class: rviz/Selection
@@ -71,8 +70,6 @@ Visualization Manager:
           Value: true
         map:
           Value: true
-        map_corner:
-          Value: true
         map_image:
           Value: true
       Marker Scale: 1
@@ -81,12 +78,11 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        initialpose:
-          map:
-            map_corner:
-              {}
-            map_image:
-              {}
+        map:
+          initialpose:
+            {}
+          map_image:
+            {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -118,6 +114,14 @@ Visualization Manager:
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
+      Value: true
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /map_segment_vis
+      Name: MarkerArray
+      Namespaces:
+        "": true
+      Queue Size: 100
       Value: true
   Enabled: true
   Global Options:
@@ -151,7 +155,7 @@ Visualization Manager:
         Value: false
       Name: Current View
       Near Clip Distance: 0.01
-      Scale: 124.418
+      Scale: 109.488
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz)
       X: -3.04993
@@ -173,5 +177,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1272
-  X: 372
-  Y: 393
+  X: 362
+  Y: 355

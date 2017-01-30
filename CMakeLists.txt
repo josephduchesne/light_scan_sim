@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   tf
   nav_msgs
+  message_generation
 )
 
 find_package(OpenCV)
@@ -48,17 +49,17 @@ find_package(OpenCV)
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+add_message_files(
+  FILES
+  Segment.msg 
+  SegmentList.msg
+)
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   sensor_msgs#   std_msgs
-# )
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+)
 
 ###################################
 ## catkin specific configuration ##
@@ -72,7 +73,7 @@ find_package(OpenCV)
 catkin_package(
   INCLUDE_DIRS include
 #  LIBRARIES light_scan_sim
-  CATKIN_DEPENDS roscpp rospy sensor_msgs std_msgs tf nav_msgs
+  CATKIN_DEPENDS roscpp rospy sensor_msgs std_msgs tf nav_msgs message_runtime
 #  DEPENDS system_lib
 )
 
@@ -124,10 +125,11 @@ target_link_libraries(light_scan_sim_node
 
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
-# install(PROGRAMS
-#   scripts/my_python_script
-#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
+install(PROGRAMS
+  scripts/pose_estimate_tf_publisher.py
+  scripts/visualize_segment_list.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
 ## Mark executables and/or libraries for installation
 install(TARGETS 
