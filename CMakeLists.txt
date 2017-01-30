@@ -53,6 +53,8 @@ add_message_files(
   FILES
   Segment.msg 
   SegmentList.msg
+  Material.msg
+  MaterialList.msg
 )
 
 ## Generate added messages and services with any dependencies listed here
