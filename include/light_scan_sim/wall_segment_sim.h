@@ -13,18 +13,21 @@
 #include <opencv2/core/core.hpp>
 #include <light_scan_sim/SegmentList.h>
 #include <light_scan_sim/MaterialList.h>
+#include <Box2D/Box2D.h>
 
 class WallSegmentSim {
   private:
     light_scan_sim::SegmentList segments_;
     light_scan_sim::MaterialList materials_;
+
+    std::shared_ptr<b2World> world_ = nullptr;
   
     void InitializeWorld();
 
   public:
     WallSegmentSim(light_scan_sim::SegmentList segments, light_scan_sim::MaterialList materials);
 
-    bool Trace(cv::Point &start, double theta, double length, double &range);
+    bool Trace(double x, double y, double theta, double length, double &range);
   
 };
 

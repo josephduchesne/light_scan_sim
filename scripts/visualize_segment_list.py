@@ -64,7 +64,7 @@ def generate_markers():
         m.color.r = materials[segment.type].color[0]
         m.color.g = materials[segment.type].color[1]
         m.color.b = materials[segment.type].color[2]
-      m.color.a = 1.0
+      m.color.a = 0.8
       markers.markers.append(m)
 
     print "Generated markers" 

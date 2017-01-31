@@ -18,15 +18,18 @@
  *
  * @return true if there was a collision or false
  */
-bool RayCast::Trace(cv::Point &start, cv::Point &end, cv::Point &hit) {
+bool RayCast::Trace(cv::Point2f &start, cv::Point2f &end, cv::Point2f &hit) {
+
+  cv::Point2i start_d = start;  // Opencv casting rounds rather than truncating
+  cv::Point2i end_d = end;
 
   // Ensure that the line is in the map
-  if (!cv::clipLine(map_.size(), start, end)) {
+  if (!cv::clipLine(map_.size(), start_d, end_d)) {
     return false;
   }
 
   // Iterate from start to end
-  cv::LineIterator it(map_, start, end, 8);  // 8 way connectivity, smoother than 4 way
+  cv::LineIterator it(map_, start_d, end_d, 8);  // 8 way connectivity, smoother than 4 way
   for(int i = 0; i < it.count; i++, ++it) {
     if (map_.at<uint8_t>(it.pos())>0) {
       hit = it.pos();
@@ -44,7 +47,7 @@ bool RayCast::Trace(cv::Point &start, cv::Point &end, cv::Point &hit) {
  *
  * @return a laser scan message
  */
-sensor_msgs::LaserScan RayCast::Scan(cv::Point start, double yaw) {
+sensor_msgs::LaserScan RayCast::Scan(cv::Point2f start, double yaw) {
   sensor_msgs::LaserScan scan;
 
   scan.angle_min = angle_min_;
@@ -54,16 +57,24 @@ sensor_msgs::LaserScan RayCast::Scan(cv::Point start, double yaw) {
   scan.angle_increment = angle_inc_;
   std::normal_distribution<double> gaussian_dist(0.0, noise_std_dev_);
 
-  cv::Point hit;
+  cv::Point2f hit;
   double max_px = ray_max_/m_per_px_;
  
   for (double a = angle_min_; a <= angle_max_; a+=angle_inc_) {
-    cv::Point end = cv::Point(start.x + max_px*cos(yaw+a),
-                              start.y + max_px*sin(yaw+a));
+    cv::Point2f end = cv::Point2f(start.x + max_px*cos(yaw+a),
+                                  start.y + max_px*sin(yaw+a));
     
     if (Trace(start, end, hit)) {
       double range = cv::norm(hit-start);  // distance from start to hit
       range *= m_per_px_;  // convert back to m
+
+      // Check for collision with wall segments
+      double start_x_m = start.x*m_per_px_ + map_offset_.x;
+      double start_y_m = start.y*m_per_px_ + map_offset_.y;
+      wall_segments_->Trace(start_x_m, start_y_m, yaw+a, range, range);
+
+      // ROS_INFO_STREAM("Outside: " << range);
+
       // Add gaussian noise
       range += gaussian_dist(random_generator_);
 

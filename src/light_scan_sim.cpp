@@ -57,7 +57,7 @@ void LightScanSim::MapCallback(const nav_msgs::OccupancyGrid::Ptr& grid)
   cv::threshold(map_mat, map_mat, 254, 255, 4); 
 
   // Update map
-  ray_cast_->SetMap(map_mat, map_.info.resolution);
+  ray_cast_->SetMap(map_mat, map_.info.resolution, map_.info.origin.position.x, map_.info.origin.position.y);
   
   // Create transform from map tf to image tf
   map_to_image_.setOrigin(tf::Vector3(map_.info.origin.position.x,
@@ -67,6 +67,9 @@ void LightScanSim::MapCallback(const nav_msgs::OccupancyGrid::Ptr& grid)
   map_to_image_.setRotation(tf::createQuaternionFromRPY(0, 0, 0));
 
   map_loaded_ = true;
+  if (map_loaded_ && segments_loaded_ && materials_loaded_) {
+    ray_cast_->SetSegments(segments_, materials_);
+  }
 }
 
 /**
@@ -78,7 +81,7 @@ void LightScanSim::MaterialsCallback(const light_scan_sim::MaterialList::Ptr& ma
   materials_ = *materials;
   materials_loaded_ = true;
 
-  if (segments_loaded_) {
+  if (map_loaded_ && segments_loaded_ && materials_loaded_) {
     ray_cast_->SetSegments(segments_, materials_);
   }
 }
@@ -92,7 +95,9 @@ void LightScanSim::SegmentsCallback(const light_scan_sim::SegmentList::Ptr& segm
   segments_ = *segments;
   segments_loaded_ = true;
 
-  if (materials_loaded_) {
+  // Todo: Somehow use TF to transform segments into image space
+
+  if (map_loaded_ && segments_loaded_ && materials_loaded_) {
     ray_cast_->SetSegments(segments_, materials_);
   }
 }

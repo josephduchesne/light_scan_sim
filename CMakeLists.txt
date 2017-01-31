@@ -117,6 +117,7 @@ add_executable(light_scan_sim_node
 target_link_libraries(light_scan_sim_node
   ${catkin_LIBRARIES}
   ${OpenCV_LIBRARIES}
+  Box2D
 )
 
 #############

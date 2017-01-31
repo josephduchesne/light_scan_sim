@@ -23,6 +23,7 @@ class RayCast {
   cv::Mat map_;
   std::shared_ptr<WallSegmentSim> wall_segments_ = nullptr;
   double m_per_px_;
+  cv::Point map_offset_;
 
   // Default configuration variables
   double ray_min_ = 1.0;  // m
@@ -46,7 +47,8 @@ class RayCast {
       noise_std_dev_ = noise;
     };
 
-    void SetMap(cv::Mat& map, double m_per_px) {
+    void SetMap(cv::Mat& map, double m_per_px, double offset_x, double offset_y) {
+      map_offset_ = cv::Point(offset_x, offset_y);
       map_ = map;
       m_per_px_ = m_per_px;
     };
@@ -55,9 +57,9 @@ class RayCast {
       wall_segments_ = std::make_shared<WallSegmentSim>(segments, materials);
     }
 
-    bool Trace(cv::Point &start, cv::Point &end, cv::Point &hit);
+    bool Trace(cv::Point2f &start, cv::Point2f &end, cv::Point2f &hit);
   
-    sensor_msgs::LaserScan Scan(cv::Point start, double yaw);
+    sensor_msgs::LaserScan Scan(cv::Point2f start, double yaw);
 };
 
 #endif
