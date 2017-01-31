@@ -14,12 +14,14 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include "light_scan_sim/wall_segment_sim.h"
 
 #include <random>
 
 class RayCast {
   std::default_random_engine random_generator_;
   cv::Mat map_;
+  std::shared_ptr<WallSegmentSim> wall_segments_ = nullptr;
   double m_per_px_;
 
   // Default configuration variables
@@ -48,6 +50,10 @@ class RayCast {
       map_ = map;
       m_per_px_ = m_per_px;
     };
+
+    void SetSegments(light_scan_sim::SegmentList &segments, light_scan_sim::MaterialList &materials) {
+      wall_segments_ = std::make_shared<WallSegmentSim>(segments, materials);
+    }
 
     bool Trace(cv::Point &start, cv::Point &end, cv::Point &hit);
   

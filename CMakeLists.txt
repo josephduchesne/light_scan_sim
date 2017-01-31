@@ -106,7 +106,8 @@ include_directories(
 add_executable(light_scan_sim_node 
   src/light_scan_sim_node.cpp
   src/light_scan_sim.cpp
-  src/ray_cast.cpp)
+  src/ray_cast.cpp
+  src/wall_segment_sim.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above

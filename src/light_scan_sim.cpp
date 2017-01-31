@@ -26,12 +26,16 @@ LightScanSim::LightScanSim(ros::NodeHandle node) {
                                         node.param<double>("range/noise", 0.01));
 
   node.getParam("map/topic", map_topic_);
+  node.getParam("map/materials_topic", materials_topic_);
+  node.getParam("map/segments_topic", segments_topic_);
   node.getParam("laser/topic", laser_topic_);
   node.getParam("map/image_frame", image_frame_);
   node.getParam("laser/frame", laser_frame_);
 
   // Subscribe / Publish
   map_sub_ = node.subscribe(map_topic_, 1, &LightScanSim::MapCallback, this);
+  materials_sub_ = node.subscribe(materials_topic_, 1, &LightScanSim::MaterialsCallback, this);
+  segments_sub_ = node.subscribe(segments_topic_, 1, &LightScanSim::SegmentsCallback, this);
   laser_pub_ = node.advertise<sensor_msgs::LaserScan>(laser_topic_, 1);
 }
 
@@ -65,6 +69,33 @@ void LightScanSim::MapCallback(const nav_msgs::OccupancyGrid::Ptr& grid)
   map_loaded_ = true;
 }
 
+/**
+ * @brief Load materials and set segments/materials on ray_cast_ if possible
+ *
+ * @param materials The material list
+ */
+void LightScanSim::MaterialsCallback(const light_scan_sim::MaterialList::Ptr& materials) {
+  materials_ = *materials;
+  materials_loaded_ = true;
+
+  if (segments_loaded_) {
+    ray_cast_->SetSegments(segments_, materials_);
+  }
+}
+
+/**
+ * @brief Load segments and set segments/materials on ray_cast_ if possible
+ *
+ * @param segments The segment list
+ */
+void LightScanSim::SegmentsCallback(const light_scan_sim::SegmentList::Ptr& segments) {
+  segments_ = *segments;
+  segments_loaded_ = true;
+
+  if (materials_loaded_) {
+    ray_cast_->SetSegments(segments_, materials_);
+  }
+}
 
 /**
  * @brief Generate and publish the simulated laser scan

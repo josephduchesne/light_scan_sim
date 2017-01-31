@@ -28,18 +28,26 @@
 class LightScanSim {
   // Internal data
   nav_msgs::OccupancyGrid map_;
+  light_scan_sim::MaterialList materials_;
+  light_scan_sim::SegmentList segments_;
   tf::Transform map_to_image_;
   tf::TransformBroadcaster tf_broadcaster_;
   tf::TransformListener tf_listener_;
   bool map_loaded_ = false;
+  bool segments_loaded_ = false;
+  bool materials_loaded_ = false;
 
   // Publishers and subscribers
   ros::Subscriber map_sub_;
+  ros::Subscriber materials_sub_;
+  ros::Subscriber segments_sub_;
   ros::Publisher laser_pub_;
   std::shared_ptr<RayCast> ray_cast_;
 
   // Configurable options
   std::string map_topic_ = "/map";
+  std::string materials_topic_ = "/map_materials";
+  std::string segments_topic_ = "/map_segments";
   std::string laser_topic_ = "/scan";
 
   std::string image_frame_ = "/map_image";
@@ -49,6 +57,8 @@ class LightScanSim {
     LightScanSim(ros::NodeHandle node);
 
     void MapCallback(const nav_msgs::OccupancyGrid::Ptr& grid);
+    void MaterialsCallback(const light_scan_sim::MaterialList::Ptr& materials);
+    void SegmentsCallback(const light_scan_sim::SegmentList::Ptr& segments);
 
     void Update();
 
