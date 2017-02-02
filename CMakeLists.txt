@@ -167,8 +167,8 @@ install(FILES
 ## Add gtest based cpp test target and link libraries
 if(CATKIN_ENABLE_TESTING)
   find_package(rostest REQUIRED)
-  catkin_add_gtest(${PROJECT_NAME}-test test/test_ray_cast.cpp src/ray_cast.cpp)
-  target_link_libraries(${PROJECT_NAME}-test ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+  catkin_add_gtest(${PROJECT_NAME}-test test/test_ray_cast.cpp src/ray_cast.cpp src/wall_segment_sim.cpp)
+  target_link_libraries(${PROJECT_NAME}-test ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} Box2D )
 endif()
 
 ## Add folders to be run by python nosetests

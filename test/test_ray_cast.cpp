@@ -17,36 +17,36 @@ class RayCastTest : public ::testing::Test {};
 
 TEST_F(RayCastTest, TraceTest) {
   RayCast rc;
-  cv::Point start, end, hit;
+  cv::Point2f start, end, hit;
 
   // Set up the raycast with a very simple map
   cv::Mat mat = cv::Mat::zeros(20, 20, CV_8UC1); 
   cv::rectangle( mat, cv::Point( 10, 0 ), cv::Point( 20, 20), 255, CV_FILLED);
-  rc.SetMap(mat, 1.0);
+  rc.SetMap(mat, 1.0, 0, 0);
 
   // Test tracing from empty space into wall
-  start = cv::Point(5,5);
-  end = cv::Point(15,5);
+  start = cv::Point2f(5,5);
+  end = cv::Point2f(15,5);
   EXPECT_TRUE(rc.Trace(start, end, hit));
   EXPECT_NEAR(hit.x, 10, 1e-5);
   EXPECT_NEAR(hit.y, 5, 1e-5);
   
   // Test tracing out of map into empty space
-  start = cv::Point(5,5);
-  end = cv::Point(-5,5);
+  start = cv::Point2f(5,5);
+  end = cv::Point2f(-5,5);
   EXPECT_FALSE(rc.Trace(start, end, hit));
 }
 
 
 TEST_F(RayCastTest, ScanTest) {
   RayCast rc(0, 50, -M_PI_2, M_PI_2, M_PI_2, 0);
-  cv::Point start(5,5);
+  cv::Point2f start(5,5);
 
   // Set up the raycast with a very simple map
   cv::Mat mat = cv::Mat::zeros(20, 20, CV_8UC1); 
   cv::rectangle( mat, cv::Point( 15, 0 ), cv::Point( 20, 20), 255, CV_FILLED);
   cv::rectangle( mat, cv::Point( 0, 17 ), cv::Point( 20, 20), 255, CV_FILLED);
-  rc.SetMap(mat, 2.0);  // 2.0m per pixel
+  rc.SetMap(mat, 2.0, 0, 0);  // 2.0m per pixel
 
   // Test tracing from empty space into wall
   sensor_msgs::LaserScan s = rc.Scan(start, M_PI_2);  // Scan angled up
