@@ -14,6 +14,7 @@ def callback_pose(data):
 
 # Publish rviz /initialpose as a tf
 if __name__ == '__main__':
+
     rospy.init_node('pose_estimate_tf_pub')
     rospy.Subscriber("/initialpose", PoseWithCovarianceStamped, callback_pose)
     broadcaster = tf.TransformBroadcaster()

@@ -1,5 +1,5 @@
 range:
-  min: 1.0  # Min range (m)
+  min: 0.1  # Min range (m)
   max: 20.0  # Max range (m)
   noise: 0.005  # Standard deviation of gaussian noise (m)
 angle:

@@ -71,14 +71,18 @@ sensor_msgs::LaserScan RayCast::Scan(cv::Point2f start, double yaw) {
       // Check for collision with wall segments
       double start_x_m = start.x*m_per_px_ + map_offset_.x;
       double start_y_m = start.y*m_per_px_ + map_offset_.y;
-      wall_segments_->Trace(start_x_m, start_y_m, yaw+a, range, range);
+      wall_segments_->Trace(start_x_m, start_y_m, yaw+a, range, ray_max_, range);
 
       // ROS_INFO_STREAM("Outside: " << range);
 
       // Add gaussian noise
-      range += gaussian_dist(random_generator_);
+      if (range < ray_max_) {
+        range += gaussian_dist(random_generator_);
+      }
 
-      range = std::max(ray_min_, range);  // Apply min
+      if (range < ray_min_) {
+        range = ray_max_ + 1.0;
+      }
 
       scan.ranges.push_back(range);
     } else {

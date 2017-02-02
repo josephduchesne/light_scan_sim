@@ -14,6 +14,7 @@
 #include <light_scan_sim/SegmentList.h>
 #include <light_scan_sim/MaterialList.h>
 #include <Box2D/Box2D.h>
+#include <random>
 
 class WallSegmentSim {
   private:
@@ -27,7 +28,7 @@ class WallSegmentSim {
   public:
     WallSegmentSim(light_scan_sim::SegmentList segments, light_scan_sim::MaterialList materials);
 
-    bool Trace(double x, double y, double theta, double length, double &range);
+    bool Trace(double x, double y, double theta, double length, double ray_max, double &range);
   
 };
 
