@@ -18,10 +18,9 @@ Here's a basic rundown:
 ## Features:
 - Gaussian noise (optional, disable by setting laser/noise to 0)
 - Full RosParam Configuration
-- Unit tests
-- ~~Vector obstacles~~
-- ~~Glass~~
-- ~~Reflectivity~~
+- Unit tests (incomplete)
+- Vector obstacles
+- Glass
 
 ## Configurable Parameters:
 - range/min: Min laser range (double, default: 1.0). Values closer will be set to range/min value.
