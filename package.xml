@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>light_scan_sim</name>
-  <version>0.0.0</version>
+  <version>0.0.9</version>
   <description>The light_scan_sim package simulates a laser scan originating from a TF against a costmap.</description>
 
   <maintainer email="josephgeek@gmail.com">Joseph Duchesne</maintainer>
