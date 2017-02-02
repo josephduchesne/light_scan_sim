@@ -1,3 +1,11 @@
+/**
+ * light_scan_sim wall_segment_sim.cpp
+ * @brief Cast simulated laser ray at vector wall segments
+ *
+ * @copyright 2017 Joseph Duchesne
+ * @author Joseph Duchesne
+ */
+
 #include "light_scan_sim/wall_segment_sim.h"
 #include <cmath>
 #include <vector>
