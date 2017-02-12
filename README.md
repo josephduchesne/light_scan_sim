@@ -1,5 +1,7 @@
 # light_scan_sim
 
+[![Build Status](http://build.ros.org/job/Idev__light_scan_sim__ubuntu_trusty_amd64/badge/icon)](http://build.ros.org/job/Idev__light_scan_sim__ubuntu_trusty_amd64)
+
 A very lightweight 2d laser scan simulator for ROS.
 
 This is designed as an alternative to running Gazebo, or Player Stage. 
