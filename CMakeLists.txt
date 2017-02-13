@@ -156,13 +156,18 @@ install(TARGETS
 # )
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
+install(DIRECTORY data
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+
+install(FILES
+  config/config.yaml
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config
+)
+
 install(FILES
   launch/test.launch
-  config/config.yaml
-  data/office.yaml
-  data/office.png
-  data/test.rviz
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
 )
 
 #############
