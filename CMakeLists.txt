@@ -76,7 +76,7 @@ catkin_package(
   INCLUDE_DIRS include
 #  LIBRARIES light_scan_sim
   CATKIN_DEPENDS roscpp rospy sensor_msgs std_msgs tf nav_msgs message_runtime
-#  DEPENDS system_lib
+#  DEPENDS Box2D_shared
 )
 
 ###########
@@ -90,6 +90,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
   ${OpenCV_INCLUDE_DIRS}
   include
+  thirdparty
 )
 
 ## Declare a C++ library
@@ -100,7 +101,9 @@ include_directories(
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(light_scan_sim ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+add_subdirectory("thirdparty/Box2D")
+
 
 ## Declare a C++ executable
 add_executable(light_scan_sim_node 
@@ -108,6 +111,8 @@ add_executable(light_scan_sim_node
   src/light_scan_sim.cpp
   src/ray_cast.cpp
   src/wall_segment_sim.cpp)
+
+add_dependencies(light_scan_sim_node Box2D_shared)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -117,7 +122,7 @@ add_executable(light_scan_sim_node
 target_link_libraries(light_scan_sim_node
   ${catkin_LIBRARIES}
   ${OpenCV_LIBRARIES}
-  Box2D
+  Box2D_shared
 )
 
 #############
@@ -151,13 +156,18 @@ install(TARGETS
 # )
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
+install(DIRECTORY data
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+
+install(FILES
+  config/config.yaml
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config
+)
+
 install(FILES
   launch/test.launch
-  config/config.yaml
-  data/office.yaml
-  data/office.png
-  data/test.rviz
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
 )
 
 #############
@@ -168,7 +178,8 @@ install(FILES
 if(CATKIN_ENABLE_TESTING)
   find_package(rostest REQUIRED)
   catkin_add_gtest(${PROJECT_NAME}-test test/test_ray_cast.cpp src/ray_cast.cpp src/wall_segment_sim.cpp)
-  target_link_libraries(${PROJECT_NAME}-test ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} Box2D )
+  add_dependencies(${PROJECT_NAME}-test Box2D_shared)
+  target_link_libraries(${PROJECT_NAME}-test ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} Box2D_shared )
 endif()
 
 ## Add folders to be run by python nosetests
