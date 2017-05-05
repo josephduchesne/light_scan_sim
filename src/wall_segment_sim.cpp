@@ -44,7 +44,7 @@ bool WallSegmentSim::Trace(double x, double y, double theta, double length, doub
   static std::default_random_engine random;
   static std::uniform_real_distribution<> uniform_dist(0, 1);
 
-  if (isnan(theta)) {
+  if (std::isnan(theta)) {
     return false;
   }
 

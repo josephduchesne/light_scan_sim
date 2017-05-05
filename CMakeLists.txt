@@ -112,7 +112,7 @@ add_executable(light_scan_sim_node
   src/ray_cast.cpp
   src/wall_segment_sim.cpp)
 
-add_dependencies(light_scan_sim_node Box2D_shared)
+add_dependencies(light_scan_sim_node Box2D_shared ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
