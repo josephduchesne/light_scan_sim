@@ -34,17 +34,18 @@ class RayCast {
   double angle_inc_ = 0.01;  // rad
 
   double noise_std_dev_ = 0.01;  // std. deviation of laser noise
-
+  double max_intensity_ = -1;  //intensity to provide in laser scan message, or -1 for no intensity data
   public:
     RayCast() {}
     RayCast(double ray_min, double ray_max,
-            double angle_min, double angle_max, double angle_inc, double noise) {
+            double angle_min, double angle_max, double angle_inc, double noise, double intensity_max) {
       ray_min_ = ray_min;
       ray_max_ = ray_max;
       angle_min_ = angle_min;
       angle_max_ = angle_max;
       angle_inc_ = angle_inc;
       noise_std_dev_ = noise;
+      max_intensity_ = intensity_max;
     };
 
     void SetMap(cv::Mat& map, double m_per_px, double offset_x, double offset_y) {
@@ -58,9 +59,8 @@ class RayCast {
     }
 
     bool Trace(cv::Point2f &start, cv::Point2f &end, cv::Point2f &hit);
-  
+
     sensor_msgs::LaserScan Scan(cv::Point2f start, double yaw);
 };
 
 #endif
-
