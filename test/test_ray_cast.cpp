@@ -20,7 +20,7 @@ TEST_F(RayCastTest, TraceTest) {
   cv::Point2f start, end, hit;
 
   // Set up the raycast with a very simple map
-  cv::Mat mat = cv::Mat::zeros(20, 20, CV_8UC1); 
+  cv::Mat mat = cv::Mat::zeros(20, 20, CV_8UC1);
   cv::rectangle( mat, cv::Point( 10, 0 ), cv::Point( 20, 20), 255, CV_FILLED);
   rc.SetMap(mat, 1.0, 0, 0);
 
@@ -30,7 +30,7 @@ TEST_F(RayCastTest, TraceTest) {
   EXPECT_TRUE(rc.Trace(start, end, hit));
   EXPECT_NEAR(hit.x, 10, 1e-5);
   EXPECT_NEAR(hit.y, 5, 1e-5);
-  
+
   // Test tracing out of map into empty space
   start = cv::Point2f(5,5);
   end = cv::Point2f(-5,5);
@@ -39,11 +39,11 @@ TEST_F(RayCastTest, TraceTest) {
 
 
 TEST_F(RayCastTest, ScanTest) {
-  RayCast rc(0, 50, -M_PI_2, M_PI_2, M_PI_2, 0);
+  RayCast rc(0, 50, -M_PI_2, M_PI_2, M_PI_2, 0, 128.0);
   cv::Point2f start(5,5);
 
   // Set up the raycast with a very simple map
-  cv::Mat mat = cv::Mat::zeros(20, 20, CV_8UC1); 
+  cv::Mat mat = cv::Mat::zeros(20, 20, CV_8UC1);
   cv::rectangle( mat, cv::Point( 15, 0 ), cv::Point( 20, 20), 255, CV_FILLED);
   cv::rectangle( mat, cv::Point( 0, 17 ), cv::Point( 20, 20), 255, CV_FILLED);
   rc.SetMap(mat, 2.0, 0, 0);  // 2.0m per pixel
@@ -54,11 +54,13 @@ TEST_F(RayCastTest, ScanTest) {
   // General properties
   EXPECT_NEAR(s.angle_min, -M_PI_2, 1e-5);
   EXPECT_EQ(3, s.ranges.size());
-
+  EXPECT_EQ(3, s.intensities.size());
   // Right wall
+
   EXPECT_NEAR(s.ranges[0], 20.0, 1e-5);  // 20m to right wall
   EXPECT_NEAR(s.ranges[1], 24.0, 1e-5);  // 24m to top wall
   EXPECT_NEAR(s.ranges[2], 51.0, 1e-5);  // max range + 1m for no return
+  EXPECT_NEAR(s.intensities[0], 128.0, 1e-5);  // intensity set to test value
 }
 
 int main(int argc, char **argv) {
