@@ -109,7 +109,7 @@ void LightScanSim::SegmentsCallback(const light_scan_sim::SegmentList::Ptr& segm
  */
 void LightScanSim::Update() {
   if (!map_loaded_) {
-    ROS_WARN("LightScanSim: Update called, no map yet");
+    ROS_WARN_THROTTLE(1,"LightScanSim: Update called, no map yet");
     return;
   }
 
@@ -124,7 +124,7 @@ void LightScanSim::Update() {
     tf_listener_.lookupTransform(image_frame_, laser_frame_,
                                  ros::Time(0), image_to_laser);
   } catch (tf::TransformException &ex) {
-    ROS_WARN("LightScanSim: %s",ex.what());
+    ROS_WARN_THROTTLE(1, "LightScanSim: %s",ex.what());
     return;
   }
 
