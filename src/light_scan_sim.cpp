@@ -4,7 +4,7 @@
  *
  * @copyright 2017 Joseph Duchesne
  * @author Joseph Duchesne
- * 
+ *
  */
 
 #include "light_scan_sim/light_scan_sim.h"
@@ -23,7 +23,8 @@ LightScanSim::LightScanSim(ros::NodeHandle node) {
                                         node.param<double>("angle/min", -M_PI_2),
                                         node.param<double>("angle/max", M_PI_2),
                                         node.param<double>("angle/increment", 0.01),
-                                        node.param<double>("range/noise", 0.01));
+                                        node.param<double>("range/noise", 0.01),
+                                        node.param<double>("intensity/max", -1.0));
 
   node.getParam("map/topic", map_topic_);
   node.getParam("map/materials_topic", materials_topic_);
@@ -31,6 +32,7 @@ LightScanSim::LightScanSim(ros::NodeHandle node) {
   node.getParam("laser/topic", laser_topic_);
   node.getParam("map/image_frame", image_frame_);
   node.getParam("laser/frame", laser_frame_);
+  node.getParam("laser/message_frame", laser_message_frame_);
 
   // Subscribe / Publish
   map_sub_ = node.subscribe(map_topic_, 1, &LightScanSim::MapCallback, this);
@@ -43,22 +45,22 @@ LightScanSim::LightScanSim(ros::NodeHandle node) {
  * @brief Recieve the subscribed map and process its data
  *
  * @param grid The map occupancy grid
- */ 
+ */
 void LightScanSim::MapCallback(const nav_msgs::OccupancyGrid::Ptr& grid)
 {
   map_ = *grid;  // Copy the entire message
-  
+
   // Convert OccupancyGrid to cv::Mat, uint8_t
   cv::Mat map_mat = cv::Mat(map_.info.height, map_.info.width,
                             CV_8UC1, map_.data.data());
   // Set unknown space (255) to free space (0)
   // 4 = threshold to zero, inverted
   // See: http://docs.opencv.org/3.1.0/db/d8e/tutorial_threshold.html
-  cv::threshold(map_mat, map_mat, 254, 255, 4); 
+  cv::threshold(map_mat, map_mat, 254, 255, 4);
 
   // Update map
   ray_cast_->SetMap(map_mat, map_.info.resolution, map_.info.origin.position.x, map_.info.origin.position.y);
-  
+
   // Create transform from map tf to image tf
   map_to_image_.setOrigin(tf::Vector3(map_.info.origin.position.x,
                                       map_.info.origin.position.y,
@@ -138,7 +140,7 @@ void LightScanSim::Update() {
 
   // Set the header values
   scan.header.stamp = image_to_laser.stamp_;  // Use correct time
-  scan.header.frame_id = laser_frame_;  // set laser's tf
+  scan.header.frame_id = laser_message_frame_;  // set laser's tf
 
   // And publish the laser scan
   laser_pub_.publish(scan);

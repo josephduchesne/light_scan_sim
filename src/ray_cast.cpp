@@ -41,7 +41,7 @@ bool RayCast::Trace(cv::Point2f &start, cv::Point2f &end, cv::Point2f &hit) {
 
 /**
  * @brief Create a simulated laser scan
- * 
+ *
  * @param start The origin point. px
  * @param yaw The origin angle of the scan
  *
@@ -59,11 +59,11 @@ sensor_msgs::LaserScan RayCast::Scan(cv::Point2f start, double yaw) {
 
   cv::Point2f hit;
   double max_px = ray_max_/m_per_px_;
- 
+
   for (double a = angle_min_; a <= angle_max_; a+=angle_inc_) {
     cv::Point2f end = cv::Point2f(start.x + max_px*cos(yaw+a),
                                   start.y + max_px*sin(yaw+a));
-    
+
     if (Trace(start, end, hit)) {
       double range = cv::norm(hit-start);  // distance from start to hit
       range *= m_per_px_;  // convert back to m
@@ -89,6 +89,9 @@ sensor_msgs::LaserScan RayCast::Scan(cv::Point2f start, double yaw) {
       scan.ranges.push_back(range);
     } else {
       scan.ranges.push_back(ray_max_+1.0);  // Out of range, represented by value>max
+    }
+    if(max_intensity_ > 0) {
+      scan.intensities.push_back(max_intensity_);
     }
   }
 

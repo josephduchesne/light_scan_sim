@@ -4,7 +4,7 @@
  *
  * @copyright 2017 Joseph Duchesne
  * @author Joseph Duchesne
- * 
+ *
  */
 
 #ifndef LIGHT_SCAN_SIM_LIGHT_SCAN_SIM_H
@@ -52,6 +52,7 @@ class LightScanSim {
 
   std::string image_frame_ = "/map_image";
   std::string laser_frame_ = "/initialpose";
+  std::string laser_message_frame_ = "/initialpose";
 
   public:
     LightScanSim(ros::NodeHandle node);
