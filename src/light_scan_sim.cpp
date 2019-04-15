@@ -33,12 +33,15 @@ LightScanSim::LightScanSim(ros::NodeHandle node) {
   node.getParam("map/image_frame", image_frame_);
   node.getParam("laser/frame", laser_frame_);
   node.getParam("laser/message_frame", laser_message_frame_);
+  node.getParam("laser/publish_laser_frame_scan", publish_laser_frame_scan_);
+  node.getParam("laser/laser_frame_scan_topic", laser_frame_scan_topic_);
 
   // Subscribe / Publish
   map_sub_ = node.subscribe(map_topic_, 1, &LightScanSim::MapCallback, this);
   materials_sub_ = node.subscribe(materials_topic_, 1, &LightScanSim::MaterialsCallback, this);
   segments_sub_ = node.subscribe(segments_topic_, 1, &LightScanSim::SegmentsCallback, this);
   laser_pub_ = node.advertise<sensor_msgs::LaserScan>(laser_topic_, 1);
+  laser_frame_scan_pub_ = node.advertise<sensor_msgs::LaserScan>(laser_frame_scan_topic_, 1);
 }
 
 /**
@@ -109,7 +112,7 @@ void LightScanSim::SegmentsCallback(const light_scan_sim::SegmentList::Ptr& segm
  */
 void LightScanSim::Update() {
   if (!map_loaded_) {
-    ROS_WARN("LightScanSim: Update called, no map yet");
+    ROS_WARN_THROTTLE(1,"LightScanSim: Update called, no map yet");
     return;
   }
 
@@ -124,7 +127,7 @@ void LightScanSim::Update() {
     tf_listener_.lookupTransform(image_frame_, laser_frame_,
                                  ros::Time(0), image_to_laser);
   } catch (tf::TransformException &ex) {
-    ROS_WARN("LightScanSim: %s",ex.what());
+    ROS_WARN_THROTTLE(1, "LightScanSim: %s",ex.what());
     return;
   }
 
@@ -144,4 +147,10 @@ void LightScanSim::Update() {
 
   // And publish the laser scan
   laser_pub_.publish(scan);
+
+  // publish scan in ray cast frame
+  sensor_msgs::LaserScan laser_frame_scan(scan);
+  laser_frame_scan.header.stamp = image_to_laser.stamp_;
+  laser_frame_scan.header.frame_id = laser_frame_;
+  laser_frame_scan_pub_.publish(laser_frame_scan);
 }

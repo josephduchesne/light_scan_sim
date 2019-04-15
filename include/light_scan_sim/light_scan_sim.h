@@ -54,6 +54,10 @@ class LightScanSim {
   std::string laser_frame_ = "/initialpose";
   std::string laser_message_frame_ = "/initialpose";
 
+  bool publish_laser_frame_scan_ = false;
+  std::string laser_frame_scan_topic_ = "/scan/laser_frame";
+  ros::Publisher laser_frame_scan_pub_;
+
   public:
     LightScanSim(ros::NodeHandle node);
 
