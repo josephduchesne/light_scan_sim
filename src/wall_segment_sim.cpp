@@ -138,6 +138,4 @@ void WallSegmentSim::InitializeWorld() {
     segment_body->CreateFixture(&fixture_def);  // Attach fixture to body
     segment_body->SetUserData(&materials_.materials[i.type]);  // Reference this segment as user data
   }
-
-  ROS_ERROR("Initialize world completed");
 }
