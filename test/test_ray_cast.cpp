@@ -34,7 +34,7 @@ TEST_F(RayCastTest, TraceTest) {
   // Test tracing out of map into empty space
   start = cv::Point2f(5,5);
   end = cv::Point2f(-5,5);
-  EXPECT_FALSE(rc.Trace(start, end, hit));
+  EXPECT_TRUE(rc.Trace(start, end, hit));
 }
 
 
@@ -59,7 +59,7 @@ TEST_F(RayCastTest, ScanTest) {
 
   EXPECT_NEAR(s.ranges[0], 20.0, 1e-5);  // 20m to right wall
   EXPECT_NEAR(s.ranges[1], 24.0, 1e-5);  // 24m to top wall
-  EXPECT_NEAR(s.ranges[2], 51.0, 1e-5);  // max range + 1m for no return
+  EXPECT_NEAR(s.ranges[2], 50.0, 1e-5);  // max range for no collision
   EXPECT_NEAR(s.intensities[0], 128.0, 1e-5);  // intensity set to test value
 }
 

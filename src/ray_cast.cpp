@@ -26,8 +26,8 @@ bool RayCast::Trace(cv::Point2f &start, cv::Point2f &end, cv::Point2f &hit) {
   // Ensure that the line is in the map
   if (!cv::clipLine(map_.size(), start_d, end_d)) {
     return false;
-  }
-
+  } 
+  hit = end;
   // Iterate from start to end
   cv::LineIterator it(map_, start_d, end_d, 8);  // 8 way connectivity, smoother than 4 way
   for(int i = 0; i < it.count; i++, ++it) {
@@ -36,7 +36,7 @@ bool RayCast::Trace(cv::Point2f &start, cv::Point2f &end, cv::Point2f &hit) {
       return true;
     }
   }
-  return false;
+  return true;
 }
 
 /**
