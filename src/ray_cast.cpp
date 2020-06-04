@@ -33,6 +33,8 @@ bool RayCast::Trace(cv::Point2f &start, cv::Point2f &end, cv::Point2f &hit) {
   for(int i = 0; i < it.count; i++, ++it) {
     if (map_.at<uint8_t>(it.pos())>0) {
       hit = it.pos();
+      cv::Scalar pixel_value = map_.at<u_char>(hit.y,hit.x);
+      pixel_at_hit = pixel_value.val[0];
       return true;
     }
   }
@@ -63,6 +65,7 @@ sensor_msgs::LaserScan RayCast::Scan(cv::Point2f start, double yaw) {
   for (double a = angle_min_; a <= angle_max_; a+=angle_inc_) {
     cv::Point2f end = cv::Point2f(start.x + max_px*cos(yaw+a),
                                   start.y + max_px*sin(yaw+a));
+    // ROS_INFO_STREAM("End: " << end);
 
     if (Trace(start, end, hit)) {
       double range = cv::norm(hit-start);  // distance from start to hit
@@ -85,13 +88,21 @@ sensor_msgs::LaserScan RayCast::Scan(cv::Point2f start, double yaw) {
       if (range < ray_min_) {
         range = ray_max_ + 1.0;
       }
-
+      // ROS_INFO_STREAM("Outside: " << range);
       scan.ranges.push_back(range);
+      
     } else {
+
       scan.ranges.push_back(ray_max_+1.0);  // Out of range, represented by value>max
+    }  
+    if (tape_intensity_ > 0 && pixel_at_hit == TAPE_VALUE) {
+        scan.intensities.push_back(tape_intensity_);
     }
-    if(max_intensity_ > 0) {
-      scan.intensities.push_back(max_intensity_);
+    else{
+      if (max_intensity_ > 0) {
+        scan.intensities.push_back(max_intensity_);
+      }
+      
     }
   }
 

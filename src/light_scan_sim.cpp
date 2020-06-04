@@ -24,7 +24,8 @@ LightScanSim::LightScanSim(ros::NodeHandle node) {
                                         node.param<double>("angle/max", M_PI_2),
                                         node.param<double>("angle/increment", 0.01),
                                         node.param<double>("range/noise", 0.01),
-                                        node.param<double>("intensity/max", -1.0));
+                                        node.param<double>("intensity/max", -1.0)
+                                        node.param<double>("intensity/tape", -1.0));
 
   node.getParam("map/topic", map_topic_);
   node.getParam("map/materials_topic", materials_topic_);

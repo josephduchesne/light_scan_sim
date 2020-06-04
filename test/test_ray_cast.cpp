@@ -39,7 +39,7 @@ TEST_F(RayCastTest, TraceTest) {
 
 
 TEST_F(RayCastTest, ScanTest) {
-  RayCast rc(0, 50, -M_PI_2, M_PI_2, M_PI_2, 0, 128.0);
+  RayCast rc(0, 50, -M_PI_2, M_PI_2, M_PI_2, 0, 128.0, 150.0);
   cv::Point2f start(5,5);
 
   // Set up the raycast with a very simple map
@@ -50,7 +50,6 @@ TEST_F(RayCastTest, ScanTest) {
 
   // Test tracing from empty space into wall
   sensor_msgs::LaserScan s = rc.Scan(start, M_PI_2);  // Scan angled up
-
   // General properties
   EXPECT_NEAR(s.angle_min, -M_PI_2, 1e-5);
   EXPECT_EQ(3, s.ranges.size());
@@ -61,6 +60,32 @@ TEST_F(RayCastTest, ScanTest) {
   EXPECT_NEAR(s.ranges[1], 24.0, 1e-5);  // 24m to top wall
   EXPECT_NEAR(s.ranges[2], 50.0, 1e-5);  // max range for no collision
   EXPECT_NEAR(s.intensities[0], 128.0, 1e-5);  // intensity set to test value
+}
+
+
+TEST_F(RayCastTest, IntensityTest) {
+  RayCast rc(0, 50, -M_PI_2, M_PI_2, M_PI_2, 0, 128.0, 150.0);
+  cv::Point2f start(50,50);
+
+  // Set up the raycast with a very simple map
+  cv::Mat mat = cv::Mat::zeros(100, 100, CV_8UC1);
+  cv::rectangle( mat, cv::Point( 65, 0 ), cv::Point( 100, 100), 255, CV_FILLED);
+   // add a tape line (pixel value of 200)
+  cv::rectangle( mat, cv::Point( 0, 67 ), cv::Point( 100, 100), 200, CV_FILLED);
+
+  rc.SetMap(mat, 2.0, 0, 0);  // 2.0m per pixel
+
+  // Test tracing from empty space into wall
+  sensor_msgs::LaserScan s = rc.Scan(start, M_PI_2);  // Scan angled up
+
+  // General properties
+  EXPECT_NEAR(s.angle_min, -M_PI_2, 1e-5);
+  EXPECT_EQ(3, s.ranges.size());
+  EXPECT_EQ(3, s.intensities.size());
+  // // Right wall
+
+  EXPECT_NEAR(s.intensities[0], 128.0, 1e-5);  // intensity set to test value
+  EXPECT_NEAR(s.intensities[1], 150.0, 1e-5); 
 }
 
 int main(int argc, char **argv) {
