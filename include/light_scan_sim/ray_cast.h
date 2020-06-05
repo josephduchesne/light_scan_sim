@@ -39,7 +39,7 @@ class RayCast {
   public:
     RayCast() {}
     RayCast(double ray_min, double ray_max,
-            double angle_min, double angle_max, double angle_inc, double noise, double intensity_max, double tape_intensity) {
+            double angle_min, double angle_max, double angle_inc, double noise, double intensity_max) {
       ray_min_ = ray_min;
       ray_max_ = ray_max;
       angle_min_ = angle_min;
