@@ -28,7 +28,7 @@ class WallSegmentSim {
   public:
     WallSegmentSim(light_scan_sim::SegmentList segments, light_scan_sim::MaterialList materials);
 
-    bool Trace(double x, double y, double theta, double length, double ray_max, double &range);
+    bool Trace(double x, double y, double theta, double length, double ray_max, double &range, double &intensity);
   
 };
 

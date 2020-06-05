@@ -35,10 +35,6 @@ class RayCast {
 
   double noise_std_dev_ = 0.01;  // std. deviation of laser noise
   double max_intensity_ = -1;  //intensity to provide in laser scan message, or -1 for no intensity data
-
-  double tape_intensity_ = -1; //retroreflective tape intensity or -1 for no intensity data
-  const unsigned int TAPE_VALUE = 200;
-  unsigned int pixel_at_hit = 0;
   
   public:
     RayCast() {}
@@ -51,7 +47,6 @@ class RayCast {
       angle_inc_ = angle_inc;
       noise_std_dev_ = noise;
       max_intensity_ = intensity_max;
-      tape_intensity_ = tape_intensity;
     };
 
     void SetMap(cv::Mat& map, double m_per_px, double offset_x, double offset_y) {

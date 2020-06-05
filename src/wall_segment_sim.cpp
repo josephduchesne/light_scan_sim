@@ -40,7 +40,7 @@ WallSegmentSim::WallSegmentSim(light_scan_sim::SegmentList segments, light_scan_
  *
  * @return true if hit, false otherwise
  */
-bool WallSegmentSim::Trace(double x, double y, double theta, double length, double ray_max, double &range) {
+bool WallSegmentSim::Trace(double x, double y, double theta, double length, double ray_max, double &range, double &intensity) {
   static std::default_random_engine random;
   static std::uniform_real_distribution<> uniform_dist(0, 1);
 
@@ -83,7 +83,7 @@ bool WallSegmentSim::Trace(double x, double y, double theta, double length, doub
   if (hits.size() > 0) {
     for (auto hit : hits) {
       double hit_chance = hit.second->max_return;
-
+      intensity = hit.second->intensity;
       if (hit.second->angular_return != 0) {
         b2Vec2 in_vec = input.p2 - input.p1;
         in_vec.Normalize();
@@ -94,13 +94,11 @@ bool WallSegmentSim::Trace(double x, double y, double theta, double length, doub
         hit_chance += hit.second->angular_return * angle_of_incidence* 180.0/M_PI;  // Convert 
         hit_chance = constrain(hit_chance, hit.second->min_return, hit.second->max_return);
       }
-
       if (uniform_dist(random) < hit_chance) {  // If the light hit
-        // ROS_INFO_STREAM("Closest: " << range);
         range = hit.first.fraction * length;
         return true;
       } else {  // We didn't 'hit', pass through if transparent or no return if opaque
-        if (hit.second->type == "opaque") {
+        if (hit.second->type == "opaque" || hit.second->type == "reflective") {
           range = ray_max + 1.0;  // Denotes 'no return'
           return true;
         }
