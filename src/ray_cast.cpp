@@ -63,7 +63,7 @@ sensor_msgs::LaserScan RayCast::Scan(cv::Point2f start, double yaw) {
   for (double a = angle_min_; a <= angle_max_; a+=angle_inc_) {
     cv::Point2f end = cv::Point2f(start.x + max_px*cos(yaw+a),
                                   start.y + max_px*sin(yaw+a));
-    double new_intensity_ = max_intensity_;
+    double lidar_intensity_ = max_intensity_;
     if (Trace(start, end, hit)) {
       double range = cv::norm(hit-start);  // distance from start to hit
       range *= m_per_px_;  // convert back to m
@@ -73,7 +73,7 @@ sensor_msgs::LaserScan RayCast::Scan(cv::Point2f start, double yaw) {
       double start_y_m = start.y*m_per_px_ + map_offset_.y;
 
       if (wall_segments_) {
-        wall_segments_->Trace(start_x_m, start_y_m, yaw+a, range, ray_max_, range, new_intensity_);
+        wall_segments_->Trace(start_x_m, start_y_m, yaw+a, range, ray_max_, range, lidar_intensity_);
       }
 
       // ROS_INFO_STREAM("Outside: " << range);
@@ -93,8 +93,8 @@ sensor_msgs::LaserScan RayCast::Scan(cv::Point2f start, double yaw) {
 
       scan.ranges.push_back(ray_max_+1.0);  // Out of range, represented by value>max
     }  
-    if (new_intensity_ > 0) {
-      scan.intensities.push_back(new_intensity_);
+    if (lidar_intensity_ > 0) {
+      scan.intensities.push_back(lidar_intensity_);
     }
 
   }
